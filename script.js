@@ -6,6 +6,40 @@
 //   }, time);
 // });
 // });
+// let promise1 = new Promise(function(resolve, reject) {
+//   let time = Math.random() * (3000 - 1000) + 1000;
+//   setTimeout(function(){
+//     resolve(time);
+//   }, time);
+// });
+
+// let promise2 = new Promise(function(resolve, reject) {
+//   let time = Math.random() * (3000 - 1000) + 1000;
+//   setTimeout(function(){
+//     resolve(time);
+//   }, time);
+// });
+
+// let promise3 = new Promise(function(resolve, reject) {
+//   let time = Math.random() * (3000 - 1000) + 1000;
+//   setTimeout(function(){
+//     resolve(time);
+//   }, time);
+// });
+
+// Promise.all([promise1, promise2, promise3]).then((values) => {
+//   let output = document.getElementById('output');
+//   for (let i = 0; i < values.length; i++) {
+//     let row = document.createElement('tr');
+//     let nameCell = document.createElement('td');
+//     nameCell.textContent = `Promise ${i + 1}`;
+//     row.appendChild(nameCell);
+//     let resultCell = document.createElement('td');
+//     resultCell.textContent = values[i];
+//     row.appendChild(resultCell);
+//     output.appendChild(row);
+//   }
+// });
 let promise1 = new Promise(function(resolve, reject) {
   let time = Math.random() * (3000 - 1000) + 1000;
   setTimeout(function(){
@@ -27,32 +61,40 @@ let promise3 = new Promise(function(resolve, reject) {
   }, time);
 });
 
+let output = document.getElementById('output');
+
+// Add the "Loading..." row
+let loadingRow = document.createElement('tr');
+let loadingCell = document.createElement('td');
+loadingCell.textContent = 'Loading...';
+loadingCell.colSpan = 2; // to make it span 2 columns
+loadingRow.appendChild(loadingCell);
+output.appendChild(loadingRow);
+
 Promise.all([promise1, promise2, promise3]).then((values) => {
-  // values is an array of the resolved values of your promises
-  // in the same order as the promises in your array
+  // Remove the "Loading..." row
+  output.removeChild(loadingRow);
 
-  // Get a reference to the table body
-  let output = document.getElementById('output');
-
-  // Remove the 'Loading...' row
-  // ...
-
-  // Add a row for each promise
+  let totalTime = 0;
   for (let i = 0; i < values.length; i++) {
-    // Create a new row
     let row = document.createElement('tr');
-
-    // Create a cell for the promise name
     let nameCell = document.createElement('td');
     nameCell.textContent = `Promise ${i + 1}`;
     row.appendChild(nameCell);
-
-    // Create a cell for the promise result
     let resultCell = document.createElement('td');
     resultCell.textContent = values[i];
     row.appendChild(resultCell);
-
-    // Add the row to the table
     output.appendChild(row);
+    totalTime += values[i];
   }
+
+  // Append the total time row
+  let totalRow = document.createElement('tr');
+  let totalNameCell = document.createElement('td');
+  totalNameCell.textContent = 'Total';
+  totalRow.appendChild(totalNameCell);
+  let totalTimeCell = document.createElement('td');
+  totalTimeCell.textContent = totalTime;
+  totalRow.appendChild(totalTimeCell);
+  output.appendChild(totalRow);
 });
